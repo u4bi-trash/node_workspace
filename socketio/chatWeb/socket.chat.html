@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>크롬북 우분투</title>
+	<style>
+		#warrper{
+			width:50%;
+			height:50%;
+			border: 1px solid black;
+			position:absolute;
+		}
+
+		#log{
+			width: 99%;
+			height: 80%;
+			float:left;
+		}
+
+		#msg{
+			width:100%;
+			height:20%;
+			float:left;
+		}
+		#chatBox{
+			width:100%;
+			height:50%;
+			float:left;
+		}
+		.chatClass{
+			height: 100%;
+			float:left;
+		}
+		#name{
+			width: 20%;
+		}
+		#chat{
+			width: 63%;
+		}
+		#send{
+			width: 15%;
+			height: 100%;
+			float:left;
+		}
+		#setupBox{
+			width:100%;
+			height:50%;
+			float:left;
+		}
+		.setupClass{
+			width: 33.33%;
+			height: 100%;
+			float:left;
+		}		
+
+		textarea
+		{
+			width:100%;
+			height:100%;
+			resize : none;
+		}
+	</style>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var bodyItem=[4];
+		var chat;
+		var room=0;
+
+
+		function init(){
+			socketInit();
+			webInit();
+			joinInit();
+
+		};
+
+		function socketInit(){
+			chat = io('/chat');
+			chat.on('setNameReceive', setNameReceive);			
+			chat.on('setRoomReceive', setRoomReceive);
+			chat.on('sendMsgReceive', sendMsgReceive);
+
+		}
+
+		function webInit(){
+			bodyItem[0] = document.getElementById("name");
+			bodyItem[1] = document.getElementById("chat");
+			bodyItem[2] = document.getElementById("chatLog");
+			bodyItem[3] = document.getElementById("regdate");
+		}
+
+		function joinInit(){
+			if(!isName())fixName();
+
+		}
+
+		/* 
+		*/
+		function setNameReceive(msg){
+			bodyItem[2].value+= msg.oldName+"님이 "+msg.newName+" 닉네임으로 변경하였습니다.\n";
+		}
+
+		function setRoomReceive(msg){
+			bodyItem[2].value+= msg.name+"님이 "+msg.room+"방에 입장하였습니다.\n";
+		}
+
+		function sendMsgReceive(msg){
+			bodyItem[2].value+= msg.name+" : "+msg.chat+"\n";
+		}
+
+
+		/* isRoom() isName()
+		*/
+		function isRoom(){
+			var result = true;
+			if(room == 0)result = false;
+			return result;
+		}
+
+		function isName(){
+			var result = true;
+			if(bodyItem[0].value == ""){result = false;
+				alert('당신은 닉네임을 설정하지 않았습니다.');
+			}
+			return result;
+		}
+
+
+		/* fixName() joinRoom() sendMsg()
+		*/
+		function fixName(){
+			var result = prompt("닉네임을 설정해주세요.");
+			bodyItem[0].value=result;
+
+			chat.emit('giveSetName', bodyItem[0].value);
+		}
+
+		function joinRoom(){
+			if(bodyItem[3].value == 0) return alert('입장하실 방을 선택해주세요.');
+			if(bodyItem[3].value == room) return alert('이미 접속하고 계신 방입니다.');
+
+			room=bodyItem[3].value;	
+			chat.emit('giveSetRoom', bodyItem[3].value);
+		}
+
+		function sendMsg(){
+			if(bodyItem[1].value=="") return;
+			if(!isRoom()) return alert('방에 입장하지 않았습니다.');
+
+			chat.emit('giveSendMsg', bodyItem[1].value);
+			bodyItem[1].value="";
+		}
+
+	</script>
+	
+</head>
+
+<body onload="init()">
+	<h1>소켓.io 통신 채팅방</h1>
+
+<div id="warrper">
+
+	<div id="log">
+		<textarea id="chatLog" readonly></textarea>
+	</div>
+
+	<div id="msg">
+		<div id="chatBox">
+			
+			<input id="name" class="chatClass" type="text" readonly/>	
+			<input id="chat" class="chatClass" type="text"/>
+			<input id="send" type="button" value="전송" onClick="sendMsg()"/>
+
+		</div>
+		
+		<div id="setupBox">
+
+			<input id="fixName" class="setupClass" type="button" value="닉네임변경" onClick="fixName()" />
+
+			<select id="regdate" class="setupClass">
+
+				<option value= 0> ------ </option>
+				<option value= 1> 서울방 </option>
+				<option value= 2> 경기방 </option>
+			
+			</select class="setupClass">
+
+			<input id="fixName" class="setupClass" type="button" value="방변경" onClick="joinRoom()"/>
+
+		</div>
+	</div>
+
+</div>
+</body>
+
+</html>

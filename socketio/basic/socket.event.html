@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>크롬북 우분투</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+
+		function init(){
+
+			//소켓 생성
+			var socket = io.connect();
+			
+			socket.emit('aaa','u4bi'); // 통신주기 순서1
+			socket.on('bbb', receive); // 통신주기 순서4
+
+			/*
+			1. emit 이벤트 발생(give)
+					aaa객체에 담긴 u4bi란 데이터를 넘김
+
+			2. 서버단에서 aaa객체 감지 받은 데이터를 bbb객체에 담고
+						emit으로 클라에게 돌려보냄
+
+			3. on 이벤트 발생(receive)
+					bbb객체에 담긴 u4bi란 데이터를 받음 
+			
+			*/
+		};
+
+		function receive(msg){ // 통신주기 순서5
+			alert('bbb: '+msg);
+		}
+
+	</script>
+</head>
+
+<body onload="init()">
+	<h1>소켓.io 통신</h1>
+
+</body>
+
+</html>

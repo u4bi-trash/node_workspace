@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>크롬북 우분투</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+
+		function init(){
+
+			//소켓 생성
+			var socket = io.connect();
+
+			socket.on('getNameReceive', getNameReceive);
+			socket.on('getLogReceive', getLogReceive);
+
+			socket.emit('giveSetName','u4bi');
+			socket.emit('giveSetLog',{
+					pwd: '1234',
+					regdate: 'seoul'
+				}
+			);
+			socket.emit('giveGetName');
+			socket.emit('giveGetLog');
+		};
+
+		function getNameReceive(msg){
+			alert('name: '+msg);
+		}
+
+		function getLogReceive(msg){
+			alert('pwd: '+msg.pwd+'\n'+'regdate: '+msg.regdate);
+		}
+
+	</script>
+	
+</head>
+
+<body onload="init()">
+	<h1>소켓.io 통신 정보저장</h1>
+
+</body>
+
+</html>

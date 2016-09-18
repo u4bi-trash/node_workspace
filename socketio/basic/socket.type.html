@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>크롬북 우분투</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+
+		function init(){
+
+			//소켓 생성
+			var socket = io.connect();
+
+			socket.emit('givePublic','u4bi');
+			socket.emit('giveBroadcast','u4bi');
+			socket.emit('givePrivate',
+				{
+					id: 2,
+					msg: 'u4bi'
+				}
+			);
+
+			socket.on('publicReceive', publicReceive);
+			socket.on('broadcastReceive', broadcastReceive);
+			socket.on('privateReceive', privateReceive);
+
+		};
+
+
+		function publicReceive(msg){
+			alert('public: '+msg);
+		}
+
+		function broadcastReceive(msg){
+			alert('broadcast: '+msg);
+		}
+
+		function privateReceive(msg){
+			alert('private: '+msg);
+		}
+	</script>
+</head>
+
+<body onload="init()">
+	<h1>소켓.io 통신</h1>
+
+</body>
+
+</html>

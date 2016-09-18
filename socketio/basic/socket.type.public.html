@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>크롬북 우분투</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+
+		function init(){
+
+			//소켓 생성
+			var socket = io.connect();
+
+			socket.emit('givePublic','u4bi');
+			socket.on('publicReceive', publicReceive);
+
+		};
+
+		function publicReceive(msg){
+			alert('public: '+msg);
+		}
+
+	</script>
+</head>
+
+<body onload="init()">
+	<h1>소켓.io 통신 퍼블릭</h1>
+
+</body>
+
+</html>
