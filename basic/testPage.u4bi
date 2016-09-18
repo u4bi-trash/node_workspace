@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>우분투 리눅스 웹서버dd</title>
+</head>
+
+<body>
+	<h1>메인 페이지</h1>
+<%var name = 'adfsdf'; %>
+<%=name%>
+</body>
+
+</html>
