@@ -1,0 +1,29 @@
+<% var json=dataArray[0]%>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>우분투 리눅스 웹서버</title>
+</head>
+
+<body>
+	<h1>내용</h1>
+
+<form action="/user/<%= json.id%>?_method=DELETE" method="POST">
+	
+	고유번호 : <%= json.id%>
+	<br>
+	아이디 : <%= json.name%>
+	<br>
+	비밀번호 : <%= json.pwd%>
+	<p>
+	<input type="button" value="작성" onclick="location.href='/user/new'" />
+	<input type="button" value="수정" onclick="location.href='/user/<%= json.id%>/edit'" />
+	<input type="submit" value="삭제"/>
+	<input type="button" value="목록" onclick="location.href='/user'" />
+</form>
+
+</body>
+
+</html>

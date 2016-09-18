@@ -1,0 +1,27 @@
+<% var json=dataArray[0]%>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>우분투 리눅스 웹서버</title>
+</head>
+
+<body>
+	<h1>수정</h1>
+
+<form action="/user/<%= json.id%>?_method=PUT" method="POST">
+
+	고유번호 : <%= json.id%>
+	<br>
+	name : <input type="text" name ="name" value="<%=json.name%>" />
+	<br>
+	pwd : <input type="number" name ="pwd" value="<%=json.pwd%>"/>
+	<p>	
+	<input type="submit" value="수정" />
+
+</form>
+
+</body>
+
+</html>
